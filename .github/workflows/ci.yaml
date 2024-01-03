@@ -1,0 +1,45 @@
+name: CI Pipeline
+
+on:
+  push:
+
+jobs: #we can give multiple jobs but right now only giving build work 
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    #above uses we can give name with name:
+    - uses: actions/checkout@v3 #this is by github provided action telling to take
+    #take the latest code and @3 means version 3 using
+    #actions is provided by github so we dont need to write codes for this 
+    - uses: actions/setup-python@v4 #tellig github using actions to setup python 
+      with:
+        python-version: 3.11
+    - uses: iterative/setup-cml@v2 #it is for setuping cml ie continious machine learning
+    #when we do CI on ML project then use cml that give proper template 
+    
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run main file
+      run: |
+        python main.py
+    
+    - name: Run Tests
+      run: |
+        python -m unittest discover
+
+    - name: Create CML report
+      env:
+        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+
+        echo "# First Line of our report" >> report.md
+        echo "## Bar Plots" >> report.md
+        echo '![](./bars.png "Bar plot")' >> report.md
+        echo "## Line Plots" >> report.md
+        echo '![](./lines.png "Bar plot")' >> report.md
+
+        cml comment create report.md
