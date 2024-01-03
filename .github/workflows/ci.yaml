@@ -17,20 +17,28 @@ jobs: #we can give multiple jobs but right now only giving build work
         python-version: 3.11
     - uses: iterative/setup-cml@v2 #it is for setuping cml ie continious machine learning
     #when we do CI on ML project then use cml that give proper template 
-    
+
+    #for installing dependencies    
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    
+
     - name: Run main file
       run: |
         python main.py
-    
+    #for testing
     - name: Run Tests
       run: |
         python -m unittest discover
 
+#we setup cml so below one understand by our github assistant
+#this repo_token is for making a connection of give and take between project(repo)
+#and project(laptop)
+
+#by echo we add header first then line then plot(bar plot) and so onm
+
+#and cml cooment crate report is creating above report generated as comment
     - name: Create CML report
       env:
         REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
